@@ -49,16 +49,13 @@ class TurretMover(Node):
         joint_names = ['revolute_platform_joint', 'revolute_tilt_joint']
         
         points = []
-        point1 = JointTrajectoryPoint()
-        point1.positions = [0.0, 0.0]
-        points.append(point1)
-        
+                
         point2 = JointTrajectoryPoint()
         point2.positions = [angle0, angle1]
         point2.time_from_start = Duration(seconds=0, nanoseconds=500).to_msg()
         points.append(point2)
         
-        goal_msg.goal_time_tolerance = Duration(seconds=1, nanoseconds=0).to_msg()
+        goal_msg.goal_time_tolerance = Duration(seconds=2, nanoseconds=0).to_msg()
         goal_msg.trajectory.joint_names = joint_names
         goal_msg.trajectory.points = points
         self.is_moving = True
