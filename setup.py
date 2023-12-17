@@ -20,7 +20,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'move_turret_node = turret_control.move_turret_node:main'
+            'move_turret_node = turret_control.move_turret_node:main',
+            'dron_marker_node = turret_control.drone_marker_node:main',
+            'joy_to_turret_node = turret_control.joy_to_turret_node:main'
         ],
     },
 )
