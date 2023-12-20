@@ -50,34 +50,19 @@ class DroneMarkerPublisher(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
     def listener_callback(self, msg:Odometry):
-        #self.get_logger().info(f'I heard: "{msg.pose.pose}"')
-        marker = Marker()
-        marker.header.frame_id = 'base_link'
-        marker.header.stamp = self.get_clock().now().to_msg()
-        
-        marker.color.r = 0.0
-        marker.color.g = 1.0
-        marker.color.b = 0.0
-        marker.color.a = 1.0
-        marker.scale.x = 0.1
-        marker.scale.y = 0.1
-        marker.scale.z = 0.1
-        
-        marker.id = 1
-        # marker.frame_locked = False
-        marker.action = Marker.ADD                
-        marker.pose = msg.pose.pose
-        marker.type = Marker.ARROW
-        
+        marker = self.create_marker("base_link", 
+                                    pose=msg.pose.pose,
+                                    type=Marker.ARROW,                                    
+                                                 color=(0.0, 1.0, 0.0, 1.0))
         self.publisher_.publish(marker)
         self.broadcast_frame(msg)
         #self.get_logger().info(f'Publishing: "{marker}"')
         self.calculate_angle(msg)
     
     def calculate_angle(self, msg:Odometry):
-        target_frame_camera = "camera_link"
+        target_frame_camera = "base_link"
         target_frame_drone = self.get_drone_name()
-        source_frame = "base_link"
+        source_frame = "camera_link"
         
         try:            
             t_camera = self.tf_buffer.lookup_transform(
@@ -94,38 +79,30 @@ class DroneMarkerPublisher(Node):
         drone_position = msg.pose.pose.position
 
         # Convert the quaternion rotations to Euler angles.
-        start_position=Point(x=camera_position.x, y=-camera_position.y, z=-camera_position.z)
-        end_position=Point(x=-drone_position.x, y=drone_position.y, z=drone_position.z)        
+        start_position=Point(x=camera_position.x, y=camera_position.y, z=camera_position.z)
+        end_position=Point(x=drone_position.x, y=drone_position.y, z=drone_position.z)        
         # Convert the points to Vector3
         start_point = np.array([start_position.x, start_position.y, start_position.z])
         end_point  = np.array([end_position.x, end_position.y, end_position.z])        
-        direction =  start_point - end_point
+        direction =  end_point - start_point
         direction /= np.linalg.norm(direction)
         # Calculate the Euler angles that rotate the z-axis to the direction vector
-        yaw = np.arctan2(direction[1], direction[0])
-        #yaw = np.arctan2(direction[1], direction[0])
+        yaw = np.arctan2(direction[1], direction[0])        
         pitch = np.arctan2(direction[2], np.sqrt(direction[0]**2 + direction[1]**2))
         roll = 0.0
-        euler_angles = [roll, pitch, -yaw]
+        euler_angles = [roll, -pitch, yaw]
         # Convert the Euler angles to a quaternion
         r = R.from_euler('xyz', euler_angles, degrees=False)
+        self.get_logger().info(f'Angle difference: {euler_angles}')
         quaternion = r.as_quat()
-
-        # Calculate the difference in angles.
-        #angle_diff = euler_camera - euler_drone
-        #r = R.from_euler('xyz', angle_diff, degrees=True)
-        #quaternion = r.as_quat()
         orientation=Quaternion(x=quaternion[0], y=quaternion[1], z=quaternion[2], w=quaternion[3])
-        #orientation=Quaternion(x=t_camera.transform.rotation.x, y=t_camera.transform.rotation.y, 
-        #               z=t_camera.transform.rotation.z, w=t_camera.transform.rotation.w)
         camera_pose = Pose(position=start_position, orientation=orientation)
         marker = self.create_marker("base_link", 
                                     pose=camera_pose,
-                                    #points=[start_position, end_position], 
+                                    scale=(1.0, 0.01, 0.01),
                                                  color=(1.0, 0.0, 0.0, 1.0))
         self.publisher_.publish(marker)
-        self.get_logger().info(f'Angle difference: {euler_angles}')
-        self.send_goal(euler_angles[2] - pi, euler_angles[1])
+        self.send_goal(pi+euler_angles[2], euler_angles[1])
         
     def send_goal(self, platform_joint_angle, tilt_joint_angle):
                        
@@ -136,6 +113,7 @@ class DroneMarkerPublisher(Node):
         self.publisher.publish(joint_points)
         
     def create_marker(self, frame_id, points=None, pose: Pose = None, 
+                      scale = (0.1, 0.1, 0.1),
                       type=Marker.ARROW, color=(0.0, 1.0, 0.0, 1.0)):
         # Convert the Euler angles to a quaternion
                 
@@ -149,9 +127,9 @@ class DroneMarkerPublisher(Node):
         marker.color.b = color[2]
         marker.color.a = color[3]
         
-        marker.scale.x = 1.0
-        marker.scale.y = 0.1
-        marker.scale.z = 0.1
+        marker.scale.x = scale[0]
+        marker.scale.y = scale[1]
+        marker.scale.z = scale[2]
         
         marker.action = Marker.ADD                
         marker.type = type
