@@ -24,6 +24,9 @@ class DroneMarkerPublisher(Node):
         # Declare and acquire `turtlename` parameter
         self.drone_name = self.declare_parameter(
           'drone_name', 'X4').get_parameter_value().string_value
+
+        self.drone_x_offset = self.declare_parameter(
+          'drone_x_offset', -5.0).get_parameter_value().double_value
         
         self.subscription = self.create_subscription(
             Odometry,
@@ -80,7 +83,7 @@ class DroneMarkerPublisher(Node):
 
         # Convert the quaternion rotations to Euler angles.
         start_position=Point(x=camera_position.x, y=camera_position.y, z=camera_position.z)
-        end_position=Point(x=drone_position.x, y=drone_position.y, z=drone_position.z)        
+        end_position=Point(x=drone_position.x+self.drone_x_offset, y=drone_position.y, z=drone_position.z)        
         # Convert the points to Vector3
         start_point = np.array([start_position.x, start_position.y, start_position.z])
         end_point  = np.array([end_position.x, end_position.y, end_position.z])        

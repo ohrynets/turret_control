@@ -12,7 +12,7 @@ class TargetOnImageNode(Node):
         self.publisher = self.create_publisher(Image, '/front_camera/image_with_target', 10)
         self.subscription = self.create_subscription(
             Image,
-            '/front_camera/image_raw',
+            '/front_camera/image_with_bounding_boxes',
             self.listener_callback,
             10)
         
