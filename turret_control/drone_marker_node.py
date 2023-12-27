@@ -26,7 +26,7 @@ class DroneMarkerPublisher(Node):
           'drone_name', 'X4').get_parameter_value().string_value
 
         self.drone_x_offset = self.declare_parameter(
-          'drone_x_offset', -5.0).get_parameter_value().double_value
+          'drone_x_offset', 0.0).get_parameter_value().double_value
         
         self.subscription = self.create_subscription(
             Odometry,
@@ -165,7 +165,7 @@ class DroneMarkerPublisher(Node):
     def get_drone_name(self):
         return f'drone_{self.drone_name}'
 
-
+#ros2 run turret_control dron_marker_node --ros-args -p drone_name:=X
 def main(args=None):
     rclpy.init(args=args)
 

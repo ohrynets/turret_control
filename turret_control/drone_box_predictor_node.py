@@ -66,19 +66,11 @@ class BoxPredictor(Node):
         self.get_logger().info(f'Boxes: {x}, {y}, {w}, {h}')
         img = result.plot(conf=True, img=input_data)
         center = (int(x), int(y))
-        radius = 10
+        radius = 3
         color = (0, 255, 0)
         thickness = -1
         cv2.circle(img, center, radius, color, thickness)
         return img
-        # Postprocess the raw_result to get your box boundaries
-        #box_boundaries = result.boxes
-        ##self.get_logger().info(f'Raw box boundries shape: {box_boundaries.shape}')
-        #self.get_logger().info(f'Raw box boundries: {box_boundaries[0][0]}')
-        # Create a ROS2 message and publish the box boundaries
-        #msg = Float32MultiArray()
-        #msg.data = box_boundaries
-        #self.publisher_.publish(msg)
         
 
 def main(args=None):
@@ -87,6 +79,7 @@ def main(args=None):
     rclpy.spin(box_predictor)
     box_predictor.destroy_node()
     rclpy.shutdown()
-
+    
+#ros2 run turret_control drone_box_predictor_node
 if __name__ == '__main__':
     main()
