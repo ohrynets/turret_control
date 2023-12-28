@@ -47,6 +47,7 @@ class TurretMoverNode(Node):
 
     def send_goal(self, platform_joint_angle, tilt_joint_angle):
         if self.is_moving:
+            self.get_logger().info("Still Moving, the goal skipped ...")            
             return
         
         self.get_logger().debug(f'Turning turret to: {platform_joint_angle} and {tilt_joint_angle}"')
@@ -73,12 +74,13 @@ class TurretMoverNode(Node):
     def goal_response_callback(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
-            self.get_logger().info("Goal rejected ...")
-            return        
+            self.get_logger().info("Goal rejected ...")            
+            return                
         self.is_moving = True
         self.get_logger().info("Goal accepted ...")
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
+        
         
     def get_result_callback(self, future):
         result = future.result().result
@@ -86,8 +88,9 @@ class TurretMoverNode(Node):
         self.is_moving = False
         #rclpy.shutdown()
         
-    def feedback_callback(self, feedback_msg):
+    def feedback_callback(self, feedback_msg):        
         feedback = feedback_msg.feedback
+        #self.get_logger().info(f"Feedback: {str(feedback)}")
         
 def calc_angle(range, min = 2*math.pi, max=2*math.pi):
     if range > 0:
