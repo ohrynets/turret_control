@@ -20,7 +20,12 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'move_turret_node = turret_control.move_turret_node:main'
+            'move_turret_node = turret_control.move_turret_node:main',
+            'dron_marker_node = turret_control.drone_marker_node:main',
+            'joy_to_turret_node = turret_control.joy_to_turret_node:main',
+            'target_on_image_node = turret_control.target_on_image_node:main',
+            'image_compressor_node = turret_control.image_compressor_node:main',
+            'drone_box_predictor_node = turret_control.drone_box_predictor_node:main',
         ],
     },
 )
