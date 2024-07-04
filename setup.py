@@ -26,6 +26,7 @@ setup(
             'target_on_image_node = turret_control.target_on_image_node:main',
             'image_compressor_node = turret_control.image_compressor_node:main',
             'drone_box_predictor_node = turret_control.drone_box_predictor_node:main',
+            'slack_node = turret_control.slack_node:main',
         ],
     },
 )
