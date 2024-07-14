@@ -1,3 +1,5 @@
+from glob import glob
+import os
 from setuptools import find_packages, setup
 
 package_name = 'turret_control'
@@ -10,6 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -27,6 +30,7 @@ setup(
             'image_compressor_node = turret_control.image_compressor_node:main',
             'drone_box_predictor_node = turret_control.drone_box_predictor_node:main',
             'slack_node = turret_control.slack_node:main',
+            'llama_node = turret_control.llama_node:main',
         ],
     },
 )

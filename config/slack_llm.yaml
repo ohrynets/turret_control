@@ -1,0 +1,13 @@
+llama_node:
+  ros__parameters:
+    slack_input_topic: "/slack_in"
+    slack_output_topic: "/slack_out"
+    llm_name: "llava"
+
+slack_node:
+  ros__parameters:
+    slack_token: "slack_token"
+    slack_channel: "C064YL34N8G"
+    bot_member_id: "U07BA0R2UQG"
+    slack_input_topic: "/slack_in"
+    slack_output_topic: "/slack_out"
