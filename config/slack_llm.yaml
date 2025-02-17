@@ -1,3 +1,4 @@
+#ros2 run llm_action llm_action_node --ros-args --params-file src/turret_control/config/slack_llm.yaml
 llama_node:
   ros__parameters:
     slack_input_topic: "/slack_in"

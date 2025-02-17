@@ -31,6 +31,8 @@ setup(
             'drone_box_predictor_node = turret_control.drone_box_predictor_node:main',
             'slack_node = turret_control.slack_node:main',
             'llama_node = turret_control.llama_node_lama_index:main',
+            'camera_node = turret_control.camera_node:main',
+            'calculate_optical_flow_node = turret_control.calculate_optical_flow_node:main',
         ],
     },
 )

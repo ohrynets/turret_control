@@ -1,0 +1,13 @@
+camera_node:
+  ros__parameters:
+    camera_topic: "camera/image_raw"
+    camera_id: 0
+    refresh_rate: 10.0
+    camera_width: 1600
+    camera_height: 1200
+
+calculate_optical_flow_node:
+  ros__parameters:
+    optical_flow_topic: "camera/optical_flow"
+    camera_topic: "camera/image_raw"
+    cache_size: 5
