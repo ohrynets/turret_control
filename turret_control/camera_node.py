@@ -75,7 +75,7 @@ class CameraNode(LifecycleNode):
         if self.camera is not None:
             frame = read_camera(self.camera)
             if frame is not None:
-                self.get_logger().info(f'Reading from camera... {self.camera} with id {self.camera_id}')
+                #self.get_logger().info(f'Reading from camera... {self.camera} with id {self.camera_id}')
                 msg = self.bridge.cv2_to_imgmsg(frame, 'bgr8')
                 msg.header.stamp = self.get_clock().now().to_msg()
                 msg.header.frame_id = 'camera'

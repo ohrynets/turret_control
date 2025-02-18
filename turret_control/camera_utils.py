@@ -143,7 +143,7 @@ def draw_optical_flow_countours(frame, flow, draw_boxes=True, new_width=None, ne
             boxes = calculate_contours(flow=original_flow, new_width=scale_new_width,
                                        new_height=scale_new_height, 
                                        scale_x=scale_x, scale_y=scale_y,
-                                       score_threshold=0.02, nms_threshold=0.03)
+                                       score_threshold=0.001, nms_threshold=0.03)
         else:
             boxes = []
         blended_frame = apply_optical_flow_blend(original_frame, original_flow)
