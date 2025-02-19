@@ -12,7 +12,7 @@ slack_node:
     slack_input_topic: "/slack_in"
     slack_output_topic: "/slack_out"
 
-llm_action_server:
+llm_action_node:
   ros__parameters:
     ollama_url: "http://ollama-ros-service:11434"
     ollama_model: "llama3.2-vision"

@@ -22,6 +22,7 @@ from geometry_msgs.msg import Quaternion
 from geometry_msgs.msg import Point
 from visualization_msgs.msg import Marker
 from math import pi
+import logging
 
 class BoxPredictor(Node):
     def __init__(self):
@@ -40,7 +41,7 @@ class BoxPredictor(Node):
         
         self.package_share_directory = get_package_share_directory('turret_cv_models')
         self.model_path = path.join(self.package_share_directory, 'cv_models', 'drone-0.2.pt')
-        self.yolo_model = YOLO(self.model_path)
+        self.yolo_model = YOLO(self.model_path, verbose=False)
         self.sub = self.create_subscription(Image, f'{self.camera_prefix}/image_raw', 
                                             self.callback, 10)
         self.bridge = CvBridge()
@@ -69,6 +70,7 @@ class BoxPredictor(Node):
         self.marker_publisher = self.create_publisher(Marker, 'marker', 10)
         self.latest_camera_info:CameraInfo = None
         self.camera_resolution = None
+        logging.getLogger('torch').setLevel(logging.WARNING)
 
     def camera_info_callback(self, msg):
         # This method is called whenever a new camera info message is received
