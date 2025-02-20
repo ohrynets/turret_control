@@ -16,3 +16,8 @@ llm_action_node:
   ros__parameters:
     ollama_url: "http://ollama-ros-service:11434"
     ollama_model: "llama3.2-vision"
+
+llm_intent_ident_node:
+  ros__parameters:
+    input_topic: "/slack_in"
+    output_topic: "/slack_out"
