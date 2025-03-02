@@ -134,9 +134,12 @@ class SlackNode(Node):
                     if 'files' in msg:
                         if msg['user'] == self.bot_member_id:
                             continue
-                        file_info = msg["files"][0]                        
-                        slack_msg.screenshot = self.retreive_image(file_info)   
-                        slack_msg.is_screenshot = True
+                        slack_msg.screenshots = []
+                        for file_info in msg["files"]:
+                            if file_info['mimetype'].startswith('image'):                        
+                             slack_msg.screenshots.append(self.retreive_image(file_info))
+                        if len(slack_msg.screenshots) > 0:
+                            slack_msg.is_screenshot = True
                     self.get_logger().info(f"Publishing message {slack_msg.text} to {self.slack_input_topic}")
                     self.publisher_.publish(slack_msg)
                     

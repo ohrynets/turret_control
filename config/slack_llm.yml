@@ -12,12 +12,28 @@ slack_node:
     slack_input_topic: "/slack_in"
     slack_output_topic: "/slack_out"
 
-llm_action_node:
+llm_vision_action_node:
   ros__parameters:
     ollama_url: "http://ollama-ros-service:11434"
     ollama_model: "llama3.2-vision"
+    llm_action_name: "llm_vision_action"
+
+llm_light_action_node:
+  ros__parameters:
+    ollama_url: "http://ollama-ros-service:11434"
+    ollama_model: "llama3.2:3b"
+    llm_action_name: "llm_action_light"
 
 llm_intent_ident_node:
   ros__parameters:
     input_topic: "/slack_in"
+    output_topic: "/intent_out"
+    llm_action_name: "llm_action_light"
+    prompt_template: "intent_identification"
+
+llm_vision_processor_node:
+  ros__parameters:
+    input_topic: "/intent_out"
     output_topic: "/slack_out"
+    llm_action_name: "llm_vision_action"
+    prompt_template: "prompt_request"

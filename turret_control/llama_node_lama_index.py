@@ -89,7 +89,7 @@ class LlamaNode(Node):
 
         self.initial_time = time.time()
         if prompt_msg.is_screenshot:
-            goal_msg.image = prompt_msg.screenshot
+            goal_msg.images = prompt_msg.screenshots
         self.get_logger().info(f"Received prompt: {prompt_msg.text} image:{prompt_msg.is_screenshot}")
         self._action_client.wait_for_server()
         
